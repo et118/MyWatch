@@ -218,6 +218,31 @@ int WifiCapProgram::loop() {
                 break;
             }
 
+            case Debug: {
+                if(bluetoothSerial.hasClient()) {
+                    bluetoothSerial.print("<<<FILESTART>>>");
+                    bluetoothSerial.print("file.pcap\n");
+                    bluetoothSerial.print("abc");
+                    bluetoothSerial.write('a');
+                    bluetoothSerial.write(0x10);
+                    bluetoothSerial.write(0x29);
+                    bluetoothSerial.write(0x9a);
+                    bluetoothSerial.write(0xbf);
+                    bluetoothSerial.print("abc\n");
+                    bluetoothSerial.print("<<<FILEEND>>>");
+                    /*String fileName = "siom";
+                    fileName += ".pcap\n";
+                    bluetoothSerial.print(fileName);
+                    bluetoothSerial.write(0xa1);
+                    bluetoothSerial.write(0xb2);
+                    bluetoothSerial.write(new uint8_t[4] {0xa1,0xb2,0xc3,0xd4},4);
+                    bluetoothSerial.print("\n");*/
+                    bluetoothSerial.flush();
+                    mode=InitStart;
+                }
+                
+            }
+
 
         };
         if(touched){
@@ -235,9 +260,9 @@ void WifiCapProgram::transferDataOverBluetooth() {
         tft->fillScreen(TFT_BLACK);
         drawText(tft,120,120,2,"Transfering Data",TFT_WHITE,TFT_BLACK);
         String fileName = (char*)selectedSSID;
-        fileName += ".pcap";
-        bluetoothSerial.println(fileName);
-        
+        fileName += ".pcap\n";
+        bluetoothSerial.print("<<<FILESTART>>>");
+        bluetoothSerial.print(fileName); //Line break for start of file
         std::vector<Packet*> packets = packetBundle->getPackets();
 
         btWrite32(&bluetoothSerial,magic_number);
@@ -254,6 +279,7 @@ void WifiCapProgram::transferDataOverBluetooth() {
             btWrite32(&bluetoothSerial,packets.at(i)->origLen);
             bluetoothSerial.write(packets.at(i)->buf,packets.at(i)->inclLen);
         }
+        bluetoothSerial.print("<<<FILEEND>>>");
         bluetoothSerial.flush();
         tft->fillScreen(TFT_BLACK);
         drawText(tft,120,120,2,"Transfer Complete",TFT_WHITE,TFT_BLACK);

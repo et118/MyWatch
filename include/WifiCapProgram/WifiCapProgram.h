@@ -21,7 +21,8 @@ class WifiCapProgram : public Program {
 			InitCaptureHandshake,
 			CaptureHandshake,
 			InitTransferViaBluetooth,
-			TransferViaBluetooth
+			TransferViaBluetooth,
+			Debug
 		};
 
 		TTGOClass* ttgo;
