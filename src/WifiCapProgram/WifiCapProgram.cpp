@@ -230,13 +230,6 @@ int WifiCapProgram::loop() {
                     bluetoothSerial.write(0xbf);
                     bluetoothSerial.print("abc\n");
                     bluetoothSerial.print("<<<FILEEND>>>");
-                    /*String fileName = "siom";
-                    fileName += ".pcap\n";
-                    bluetoothSerial.print(fileName);
-                    bluetoothSerial.write(0xa1);
-                    bluetoothSerial.write(0xb2);
-                    bluetoothSerial.write(new uint8_t[4] {0xa1,0xb2,0xc3,0xd4},4);
-                    bluetoothSerial.print("\n");*/
                     bluetoothSerial.flush();
                     mode=InitStart;
                 }

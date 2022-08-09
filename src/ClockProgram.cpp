@@ -14,6 +14,7 @@ void ClockProgram::init() {
 	this->startClickTime = 0;
 	pinMode(AXP202_INT,INPUT_PULLUP);
 	attachInterrupt(AXP202_INT,handleInterrupt,FALLING);
+	ttgo->power->adc1Enable(AXP202_BATT_CUR_ADC1 | AXP202_BATT_VOL_ADC1,true);
 	ttgo->power->enableIRQ(AXP202_PEK_SHORTPRESS_IRQ,true);
 	ttgo->power->clearIRQ();
 }
@@ -79,6 +80,7 @@ void ClockProgram::checkPowerIRQ() {
 
 void ClockProgram::exit() {
 	detachInterrupt(AXP202_INT);
+	ttgo->power->adc1Enable(AXP202_BATT_CUR_ADC1 | AXP202_BATT_VOL_ADC1,false);
 	ttgo->power->enableIRQ(AXP202_PEK_SHORTPRESS_IRQ,false);
 	ttgo->power->clearIRQ();
 }
